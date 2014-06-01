@@ -1,6 +1,6 @@
 {
   "name": "steelmesh-publish",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Steelmesh Task to take a local application folder and upload it into a CouchDB instance",
   "main": "index.js",
   "scripts": {
