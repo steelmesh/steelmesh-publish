@@ -10,7 +10,7 @@ instance under the following conditions:
 
 [![NPM](https://nodei.co/npm/steelmesh-publish.png)](https://nodei.co/npm/steelmesh-publish/)
 
-[![unstable](https://img.shields.io/badge/stability-unstable-yellowgreen.svg)](https://github.com/badges/stability-badges) 
+[![Build Status](https://img.shields.io/travis/github/steelmesh-publish.svg?branch=master)](https://travis-ci.org/github/steelmesh-publish) [![unstable](https://img.shields.io/badge/stability-unstable-yellowgreen.svg)](https://github.com/badges/stability-badges) 
 
 ## Example Usage
 
