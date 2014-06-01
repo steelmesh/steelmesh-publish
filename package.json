@@ -30,6 +30,7 @@
   "dependencies": {
     "attachmate": "~0.1",
     "debug": "~0.8",
+    "fstream": "~0.1",
     "semver": "^2"
   }
 }

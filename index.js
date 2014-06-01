@@ -2,9 +2,13 @@
 'use strict';
 
 var attachmate = require('attachmate');
+var fstream = require('fstream');
 var debug = require('debug')('steelmesh-publish');
 var path = require('path');
 var semver = require('semver');
+var DEFAULT_IGNORES = [
+  /^\.git/i
+];
 
 /**
   # steelmesh-publish
@@ -22,8 +26,9 @@ var semver = require('semver');
 **/
 
 module.exports = function(db, opts) {
-  var basePath = db.config.url + '/' + db.config.db;
+  var baseUrl = db.config.url + '/' + db.config.db;
   var srcPath = (opts || {}).srcPath || process.cwd();
+  var ignorePaths = DEFAULT_IGNORES.concat((opts || {}).ignore || []).map(makeRegex);
 
   function checkPublishOK(pkg, callback) {
     db.get(pkg.name, function(err, body) {
@@ -42,6 +47,44 @@ module.exports = function(db, opts) {
 
       return callback();
     });
+  }
+
+  function filterItem(item) {
+    var relPath = item.path.slice(srcPath.length + 1);
+    var include = true;
+
+    // ensure the item does not match the ignore paths
+    ignorePaths.forEach(function(regex) {
+      include = include && (! regex.test(relPath));
+    });
+
+    return include;
+  }
+
+  function makeRegex(input) {
+    if (input instanceof RegExp) {
+      return input;
+    }
+
+    return new RegExp('^' + input + '$');
+  }
+
+  function upload(pkg, callback) {
+    // initialise the reader
+    var reader = fstream.Reader({
+      type: 'Directory',
+      path: srcPath,
+      filter: filterItem
+    });
+
+    // create the new attachmate writer
+    var writer = new attachmate.Writer({
+      path: baseUrl + '/' + pkg.name,
+      docData: pkg,
+      preserveExisting: false
+    });
+
+    reader.pipe(writer).on('end', callback).on('error', callback);
   }
 
   return function(callback) {
@@ -70,14 +113,7 @@ module.exports = function(db, opts) {
         return callback(err);
       }
 
-      // update the doc with the package.json details and then upload
-      db.insert(pkg, pkg.name, function(err) {
-        if (err) {
-          return callback(err);
-        }
-
-        attachmate.upload(basePath + '/' + pkg.name, srcPath, callback);
-      });
+      upload(pkg, callback);
     });
   };
 };
