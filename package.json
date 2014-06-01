@@ -21,5 +21,14 @@
   "bugs": {
     "url": "https://github.com/github/steelmesh-publish/issues"
   },
-  "homepage": "https://github.com/github/steelmesh-publish"
+  "homepage": "https://github.com/github/steelmesh-publish",
+  "devDependencies": {
+    "nano": "^5",
+    "tape": "^2",
+    "uuid": "^1"
+  },
+  "dependencies": {
+    "attachmate": "~0.1",
+    "debug": "~0.8"
+  }
 }
