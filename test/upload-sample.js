@@ -7,7 +7,8 @@ module.exports = function(dbname) {
   test('create the publish task', function(t) {
     t.plan(1);
     publish = require('../')(nano.use(dbname), {
-      srcPath: path.resolve(__dirname, 'assets', 'sample-0.0.1')
+      srcPath: path.resolve(__dirname, 'assets', 'sample-0.0.1'),
+      ignore: ['ignore.txt']
     });
 
     t.equal(typeof publish, 'function', 'publish function created');
@@ -47,6 +48,13 @@ module.exports = function(dbname) {
 
       t.equal(pkg.name, 'sampleapp');
       t.equal(pkg.version, '0.0.1');
+    });
+  });
+
+  test('validate that ignored files are not uploaded', function(t) {
+    t.plan(1);
+    nano.use(dbname).attachment.get('sampleapp', 'ignore.txt', function(err, body) {
+      t.ok(err instanceof Error, 'not found');
     });
   });
 };
