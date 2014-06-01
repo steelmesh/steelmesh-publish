@@ -1,0 +1,7 @@
+{
+  "name": "sampleapp",
+  "version": "1.0.0",
+  "routes": [
+    "time => time.getTime"
+  ]
+}
