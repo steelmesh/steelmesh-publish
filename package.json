@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "attachmate": "~0.1",
-    "debug": "~0.8"
+    "debug": "~0.8",
+    "semver": "^2"
   }
 }
