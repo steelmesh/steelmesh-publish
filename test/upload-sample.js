@@ -29,4 +29,24 @@ module.exports = function(dbname) {
       t.equal(body.version, '0.0.1');
     });
   });
+
+  test('validate attachment uploaded', function(t) {
+    t.plan(3);
+    nano.use(dbname).attachment.get('sampleapp', 'package.json', function(err, body) {
+      var pkg;
+
+      t.ifError(err);
+
+      try {
+        pkg = JSON.parse(body.toString());
+      }
+      catch (e) {
+        t.fail('could not parse package.json');
+        t.end();
+      }
+
+      t.equal(pkg.name, 'sampleapp');
+      t.equal(pkg.version, '0.0.1');
+    });
+  });
 };
